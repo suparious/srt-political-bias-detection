@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: political-bias-detection
+  namespace: political-bias-detection
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-dns01"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - political-bias.lab.hq.solidrust.net
+    secretName: political-bias-detection-tls
+  rules:
+  - host: political-bias.lab.hq.solidrust.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: political-bias-detection-frontend
+            port:
+              number: 80

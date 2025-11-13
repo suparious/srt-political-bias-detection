@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: political-bias-detection
+  labels:
+    name: political-bias-detection
+    app: political-bias-detection
