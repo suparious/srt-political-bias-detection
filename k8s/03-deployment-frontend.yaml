@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: suparious/political-bias-detection-frontend:latest
+        image: ghcr.io/suparious/political-bias-detection-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80

@@ -11,10 +11,10 @@
     Supports cross-platform execution (WSL2 + Windows)
 
 .PARAMETER Login
-    Perform Docker Hub login before building
+    Perform GitHub Container Registry login before building
 
 .PARAMETER Push
-    Push images to Docker Hub after building
+    Push images to GitHub Container Registry after building
 
 .PARAMETER Frontend
     Build only the frontend image
@@ -50,8 +50,8 @@ param(
 #region Configuration
 $ErrorActionPreference = "Stop"
 
-# Docker Hub configuration
-$dockerHubUsername = "suparious"
+# GitHub Container Registry configuration
+$GitHub Container RegistryUsername = "suparious"
 $frontendImageName = "political-bias-detection-frontend"
 $backendImageName = "political-bias-detection-backend"
 $imageTag = "latest"
@@ -89,7 +89,7 @@ function Test-DockerLogin {
 
     $loginStatus = docker info 2>&1 | Select-String "Username"
     if (-not $loginStatus) {
-        Write-Warning "Not logged in to Docker Hub"
+        Write-Warning "Not logged in to GitHub Container Registry"
         return $false
     }
 
@@ -98,8 +98,8 @@ function Test-DockerLogin {
 }
 
 function Invoke-DockerLogin {
-    Write-Info "`nLogging in to Docker Hub..."
-    docker login
+    Write-Info "`nLogging in to GitHub Container Registry..."
+    docker login ghcr.io
     if ($LASTEXITCODE -ne 0) {
         throw "Docker login failed"
     }
@@ -113,7 +113,7 @@ function Build-Image {
         [string]$Context
     )
 
-    $fullImageName = "$dockerHubUsername/${ImageName}:$imageTag"
+    $fullImageName = "$GitHub Container RegistryUsername/${ImageName}:$imageTag"
 
     Write-Info "`nBuilding image: $fullImageName"
     Write-Info "Dockerfile: $Dockerfile"
@@ -214,7 +214,7 @@ try {
     }
 
     if ($Push) {
-        Write-Success "`nImages pushed to Docker Hub successfully!"
+        Write-Success "`nImages pushed to GitHub Container Registry successfully!"
     } else {
         Write-Info "`nImages built successfully (not pushed)"
         Write-Info "To push images, run: .\build-and-push.ps1 -Push"
@@ -222,8 +222,8 @@ try {
 
     Write-Info "`nNext steps:"
     Write-Info "  - Deploy to Kubernetes: .\deploy.ps1"
-    Write-Info "  - Test locally: docker run -p 8080:80 $dockerHubUsername/${frontendImageName}:$imageTag"
-    Write-Info "  - Test backend: docker run -p 5000:5000 $dockerHubUsername/${backendImageName}:$imageTag"
+    Write-Info "  - Test locally: docker run -p 8080:80 $GitHub Container RegistryUsername/${frontendImageName}:$imageTag"
+    Write-Info "  - Test backend: docker run -p 5000:5000 $GitHub Container RegistryUsername/${backendImageName}:$imageTag"
 
 } catch {
     Write-Error "`n✗ Build failed: $_"
